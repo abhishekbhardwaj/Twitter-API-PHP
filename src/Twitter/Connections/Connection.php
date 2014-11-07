@@ -25,23 +25,14 @@ class Connection {
      * Creates a new Guzzle client with Twitter API's base URL and API Version.
      *
      * @param string $baseUrl Base Twitter API URL
-     * @param string $apiVersion Twitter API version
      *
      * @return GuzzleHttp\Client A new Guzzle Client
      */
-    private function createGuzzleClient($baseUrl, $apiVersion)
+    private function createGuzzleClient($baseUrl)
     {
-        //concatenate the version to API's base URL
-        $baseUrl = $baseUrl . "/{version}/";
-
         //create and return the Guzzle client
         return new Client(array(
-            'base_url' = array(
-                $baseUrl,
-                array(
-                    'version' => $apiVersion
-                )
-            )
+            'base_url' = $baseUrl
         ));
     }
 
@@ -63,6 +54,14 @@ class Connection {
         return $request;
     }
 
+    /**
+     * Prepend Twitter's API Version to an endpoint.
+     *
+     * @param  string $endpoint Twitter endpoint.
+     * @param  string $version  Twitter API version.
+     *
+     * @return string           Twitter endpoint with the API version prepended.
+     */
     private function prependVersionToEndpoint($endpoint, $version)
     {
         return ($version . '/' . $endpoint);
