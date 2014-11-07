@@ -1,0 +1,12 @@
+{
+    "API_VERSION": "1.1",
+    "BASE_URL": "https://api.twitter.com/",
+    "BASE_UPLOAD_URL": "https://upload.twitter.com/",
+    "MAX_MEDIA_IDS": 4,
+    "OAUTH_AUTHENTICATE": "oauth/authenticate",
+    "OAUTH_AUTHORIZE": "oauth/authorize",
+    "OAUTH_ACCESS_TOKEN": "oauth/access_token",
+    "OAUTH_REQUEST_TOKEN": "oauth/request_token",
+    "OAUTH2_INVALIDATE_TOKEN": "oauth2/invalidate_token",
+    "OAUTH2_TOKEN": "oauth2/token"
+}
