@@ -11,22 +11,21 @@ It supports:
 
 ### Installation
 
-To install via [Composer](https://getcomposer.org), run the following on your CLI:
-
-```
-composer require abhishekbhardwaj/twitter-api-php
-```
-
-..or, add the following to your composer.json file and run `composer install`:
+To install via [Composer](https://getcomposer.org), add the following to your composer.json file and run `composer install`:
 
 ```
     {
         "require": {
+            "guzzlehttp/guzzle": "~5.0",
+            "guzzlehttp/oauth-subscriber": "0.1.*@dev",
             "abhishekbhardwaj/twitter-api-php": "1.0.0"
         }
     }
 ```
 
+We are adding the dependencies here manually since `oauth-subscriber` still doesn't have a version for Guzzle 5.0 and thus forces Composer to error out.
+
+This is a temporary fix. Once the official support comes out, it'll all be good again!
 
 ### Dependencies
 
@@ -45,16 +44,16 @@ Some examples are located in the `examples/` directory:
 
 Detailed explanation can be found below:
 
-#### To use Twitter as an application: 
+#### To use Twitter as an application:
 
 - Create an instance of `Twitter\Config\AppCredentials` class with appropriate API keys.
- 
+
 ```php
 $credentials = new AppCredentials($consumerKey, $consumerSecret);
 ```
 
 - Create an instance of `Twitter\Client` with the `AppCredentials` object you just created.
- 
+
 ```php
 $client = new Client($credentials);
 ```
@@ -93,7 +92,7 @@ $response->getBody(); //gets the response body
 For more on Guzzle, refer to its official documentation [here](http://guzzle.readthedocs.org/en/latest/quickstart.html).
 
 
-#### To use Twitter as a user: 
+#### To use Twitter as a user:
 
 *this section shows you how to login as a user*
 
@@ -104,7 +103,7 @@ $credentials = new UserCredentials($consumerKey, $consumerSecret, $callbackUrl);
 ```
 
 - Create an instance of `Twitter\Client` with the `UserCredentials` object you just created.
- 
+
 ```php
 $client = new Client($credentials);
 ```
@@ -121,9 +120,9 @@ $app = $client->connect();
 $redirectUrl = $app->getRedirectUrlForAuth();
 ```
 
-- Redirect the user to that URL. 
+- Redirect the user to that URL.
 
-- Once the user logs in, Twitter will redirect the user back to the callbackUrl you specified in your app settings and in the credentials above. 
+- Once the user logs in, Twitter will redirect the user back to the callbackUrl you specified in your app settings and in the credentials above.
 
 - The callback url will get a temporary oauthToken and oauthVerifier as query parameters. Use them to generate an access token (token and secret):
 

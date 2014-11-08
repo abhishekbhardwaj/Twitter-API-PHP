@@ -180,7 +180,7 @@ abstract class Connection {
      *
      * @return self
      */
-    protected function setGuzzleClient(GuzzleHttp\Client $guzzleClient)
+    public function setGuzzleClient(GuzzleHttp\Client $guzzleClient)
     {
         $this->guzzleClient = $guzzleClient;
 
