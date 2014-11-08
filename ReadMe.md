@@ -1,6 +1,6 @@
 ## Simple PHP Wrapper for Twitter API v1.1
 
-Twitter-API-PHP is a simple PHP wrapper library for Twitter v1.1 calls. It has been designed for making the Twitter API as simple to use as possible for developers (on the server or on the client).
+Twitter-API-PHP is a simple PHP wrapper library for Twitter API v1.1 calls. It has been designed for making the Twitter API as simple to use as possible for developers (on the server or on the client).
 
 It supports:
 
