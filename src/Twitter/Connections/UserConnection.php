@@ -1,6 +1,9 @@
 <?php namespace Twitter\Connections;
 
+use Twitter\Config\Config;
 use Twitter\Config\UserCredentials;
+
+use GuzzleHttp\Subscriber\Oauth\Oauth1;
 
 /**
  * getRedirectUrlForAuth() and getAccessToken() are used for user authentication workflow (Oauth 1.0).
@@ -46,7 +49,7 @@ class UserConnection extends Connection {
         $this->guzzleClient->getEmitter()->attach($oauth);
 
         //if query parameters not supplied, continue.
-        if(!is_null($options['query']))
+        if(!is_null($params))
         {
             //Add query parameters to options.
             $options['query'] = $params;
@@ -69,10 +72,21 @@ class UserConnection extends Connection {
      */
     public function getRedirectUrlForAuth()
     {
+        //Oauth1 plugin to get access tokens!
+        $oauth = new Oauth1(array(
+            'consumer_key'    => $this->credentials->getConsumerKey(),
+            'consumer_secret' => $this->credentials->getConsumerSecret(),
+            'callback'        => $this->credentials->getCallbackUrl()
+        ));
+
+        $this->guzzleClient->getEmitter()->attach($oauth);
+
         //obtain request token for the authorization popup.
-        $requestTokenResponse = $this->get(
+        $requestTokenResponse = $this->guzzleClient->post(
             Config::get('oauth_request_token'),
-            null
+            array(
+                'auth' => 'oauth'
+            )
         );
 
         //Parse the response from Twitter
@@ -85,7 +99,7 @@ class UserConnection extends Connection {
         ));
 
         //return the redirect URL the user should be redirected to.
-        return (Config::get('oauth_authenticate') . '?' . $params);
+        return (Config::get('base_url') . Config::get('oauth_authenticate') . '?' . $params);
     }
 
     /**
@@ -106,8 +120,10 @@ class UserConnection extends Connection {
             'verifier'        => $oauthVerifier
         ));
 
+        //attach oauth to request
         $this->guzzleClient->getEmitter()->attach($oauth);
 
+        //POST to 'oauth/access_token' - get access tokens
         $accessTokenResponse = $this->guzzleClient->post(
             Config::get('oauth_access_token'),
             array(
@@ -115,9 +131,14 @@ class UserConnection extends Connection {
             )
         );
 
-        //handle the response
+        //handle response
         $response = array();
-        parse_str($accessTokenResponse, $response);
+        parse_str($accessTokenResponse->getBody(), $response);
+
+        //set access tokens
+        $this->credentials
+            ->setAccessToken($response['oauth_token'])
+            ->setAccessTokenSecret($response['oauth_token_secret']);
 
         return $response; //contains 'oauth_token', 'oauth_token_secret', 'user_id' and 'screen_name'
     }

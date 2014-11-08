@@ -3,6 +3,7 @@
     "description": "Simple PHP wrapper for Twitter v1.1 API. Uses Guzzle!",
     "keywords": ["twitter", "api", "sdk", "php"],
     "require": {
+        "php": ">=5.4.0",
         "guzzlehttp/guzzle": "~5.0",
         "guzzlehttp/oauth-subscriber": "0.1.*@dev"
     },
