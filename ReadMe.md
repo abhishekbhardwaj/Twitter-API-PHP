@@ -4,9 +4,9 @@ Twitter-API-PHP is a simple PHP wrapper library for Twitter API v1.1 calls. It h
 
 It supports:
 
-- [Application-Only Authentication]{https://dev.twitter.com/oauth/application-only} (Oauth 2.0).
-- [Single-User OAuth]{https://dev.twitter.com/oauth/overview/single-user} (Oauth 1.0a).
-- [3-legged Authorization]{https://dev.twitter.com/oauth/3-legged} (Oauth 1.0a).
+- [Application-Only Authentication](https://dev.twitter.com/oauth/application-only) (Oauth 2.0).
+- [Single-User OAuth](https://dev.twitter.com/oauth/overview/single-user) (Oauth 1.0a).
+- [3-legged Authorization](https://dev.twitter.com/oauth/3-legged) (Oauth 1.0a).
 
 
 ### Installation
@@ -75,7 +75,7 @@ $response->json(); //parse response as JSON and return decoded data as assoc-arr
 $response->getBody(); //gets the response body
 ```
 
-For more on Guzzle, refer to its official documentation [here]{http://guzzle.readthedocs.org/en/latest/quickstart.html}.
+For more on Guzzle, refer to its official documentation [here](http://guzzle.readthedocs.org/en/latest/quickstart.html).
 
 
 #### To use Twitter as a user: 
@@ -138,8 +138,8 @@ $response = $app->post('statuses/update.json', array('status' => 'Test status!')
 
 ### Important Links
 
-1. All Twitter API Endpoints can be found [here]{https://dev.twitter.com/rest/public}.
-2. All Twitter Authentication related stuff can be found [here]{https://dev.twitter.com/oauth}.
+1. All Twitter API Endpoints can be found [here](https://dev.twitter.com/rest/public).
+2. All Twitter Authentication related stuff can be found [here](https://dev.twitter.com/oauth).
 
 ### Contribution
 
