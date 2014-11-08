@@ -28,11 +28,11 @@ class UserCredentials extends Credentials {
      *
      * @param string $consumerKey    Twitter Application Consumer Key
      * @param string $consumerSecret Twitter Application Consumer Secret
+     * @param string|null $callbackUrl Twitter Application Callback URL
      * @param string|null $accessToken Twitter Access Token
      * @param string|null $accessTokenSecret Twitter Access Token Secret
-     * @param string|null $callbackUrl Twitter Application Callback URL
      */
-    public function __construct($consumerKey, $consumerSecret, $accessToken = null, $accessTokenSecret = null, $callbackUrl = null)
+    public function __construct($consumerKey, $consumerSecret, $callbackUrl = null, $accessToken = null, $accessTokenSecret = null)
     {
         parent::__construct($consumerKey, $consumerSecret);
 

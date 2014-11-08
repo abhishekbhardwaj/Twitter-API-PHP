@@ -31,9 +31,10 @@ use Twitter\Config\UserCredentials;
 //Twitter API keys
 $consumerKey = '{INSERT_CONSUMER_KEY_HERE}';
 $consumerSecret = '{INSERT_CONSUMER_SECRET_HERE}';
+$callbackUrl = '{INSERT_CALLBACK_URL_HERE}';
 
 //Create a new app credentials object and inject the API keys
-$credentials = new UserCredentials($consumerKey, $consumerSecret);
+$credentials = new UserCredentials($consumerKey, $consumerSecret, $callbackUrl);
 
 //create a Twitter Client.
 $client = new Client($credentials);
@@ -45,7 +46,6 @@ $app = $client->connect();
 # 1. Get Request Token from Twitter and construct a auth URL.
 ##################################################################
 
-//Get a bearer token.
 $redirectUrl = $app->getRedirectUrlForAuth();
 echo "Auth URL: " . $redirectUrl;
 
