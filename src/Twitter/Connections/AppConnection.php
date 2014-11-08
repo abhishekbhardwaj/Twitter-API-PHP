@@ -93,8 +93,12 @@ class AppConnection extends Connection {
             'Authorization' => 'Bearer ' . $this->credentials->getBearerToken()
         );
 
-        //Add query parameters to options.
-        $options['query'] => $params;
+        //if query parameters not supplied, continue.
+        if(!is_null($options['query']))
+        {
+            //Add query parameters to options.
+            $options['query'] => $params;
+        }
 
         //Add headers to the request.
         $options['headers'] => $headers;
@@ -102,4 +106,5 @@ class AppConnection extends Connection {
         //return constructed options
         return $options;
     }
+
 }

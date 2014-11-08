@@ -105,7 +105,7 @@ abstract class Connection {
         $endpoint = $this->prependVersionToEndpoint($endpoint, Config::get('api_version'));
 
         //contruct an options array to configure the request
-        $options = $this->constructRequestOptions();
+        $options = $this->constructRequestOptions($params);
 
         //make the GET request to the endpoint with the constructed options.
         $response = $this->guzzleClient->get($endpoint, $options);
@@ -130,7 +130,7 @@ abstract class Connection {
         $endpoint = $this->prependVersionToEndpoint($endpoint, Config::get('api_version'));
 
         //contruct an options array to configure the request
-        $options = $this->constructRequestOptions();
+        $options = $this->constructRequestOptions($params);
 
         //make the GET request to the endpoint with the constructed options.
         $response = $this->guzzleClient->post($endpoint, $options);
