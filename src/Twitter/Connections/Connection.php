@@ -11,10 +11,25 @@ use GuzzleHttp\Message\RequestInterface;
 
 class Connection {
 
+    /**
+     * Twitter Credentials - Connection type.
+     *
+     * @var AppCredentials|UserCredentials
+     */
     private $credentials;
 
+    /**
+     * Guzzle Client to be used during the connection.
+     *
+     * @var GuzzleHttp\Client
+     */
     private $guzzleClient;
 
+    /**
+     * A connection. Contains common methods between AppConnection & UserConnection!
+     *
+     * @param Credentials $credentials Twitter Credentials
+     */
     public function __construct(Credentials $credentials)
     {
         $this->credentials = $credentials;

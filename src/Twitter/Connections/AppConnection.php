@@ -4,6 +4,11 @@ use Twitter\Config\AppCredentials;
 
 class AppConnection extends Connection {
 
+    /**
+     * An application connection to Twitter.
+     *
+     * @param AppCredentials $credentials Twitter API credentials
+     */
     public function __construct(AppCredentials $credentials)
     {
         parent::__construct($credentials);
