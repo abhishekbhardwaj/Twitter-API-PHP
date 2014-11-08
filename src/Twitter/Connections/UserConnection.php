@@ -49,11 +49,11 @@ class UserConnection extends Connection {
         if(!is_null($options['query']))
         {
             //Add query parameters to options.
-            $options['query'] => $params;
+            $options['query'] = $params;
         }
 
         //Set the "auth" request option to "oauth" to sign using oauth.
-        $options['auth'] => 'oauth';
+        $options['auth'] = 'oauth';
 
         //return constructed options
         return $options;

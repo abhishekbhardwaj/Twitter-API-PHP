@@ -16,14 +16,14 @@ abstract class Connection {
      *
      * @var AppCredentials|UserCredentials
      */
-    private $credentials;
+    protected $credentials;
 
     /**
      * Guzzle Client to be used during the connection.
      *
      * @var GuzzleHttp\Client
      */
-    private $guzzleClient;
+    protected $guzzleClient;
 
     /**
      * A connection. Contains common methods between AppConnection & UserConnection!
@@ -47,7 +47,7 @@ abstract class Connection {
     {
         //create and return the Guzzle client
         return new Client(array(
-            'base_url' = $baseUrl
+            'base_url' => $baseUrl
         ));
     }
 
@@ -139,4 +139,51 @@ abstract class Connection {
         return $response;
     }
 
+    /**
+     * Gets the Twitter Credentials - Connection type.
+     *
+     * @return AppCredentials|UserCredentials
+     */
+    public function getCredentials()
+    {
+        return $this->credentials;
+    }
+
+    /**
+     * Sets the Twitter Credentials - Connection type.
+     *
+     * @param AppCredentials|UserCredentials $credentials the credentials
+     *
+     * @return self
+     */
+    protected function setCredentials($credentials)
+    {
+        $this->credentials = $credentials;
+
+        return $this;
+    }
+
+    /**
+     * Gets the Guzzle Client to be used during the connection.
+     *
+     * @return GuzzleHttp\Client
+     */
+    public function getGuzzleClient()
+    {
+        return $this->guzzleClient;
+    }
+
+    /**
+     * Sets the Guzzle Client to be used during the connection.
+     *
+     * @param GuzzleHttp\Client $guzzleClient the guzzle client
+     *
+     * @return self
+     */
+    protected function setGuzzleClient(GuzzleHttp\Client $guzzleClient)
+    {
+        $this->guzzleClient = $guzzleClient;
+
+        return $this;
+    }
 }

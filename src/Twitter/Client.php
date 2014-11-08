@@ -37,7 +37,7 @@ class Client {
     public function __construct(Credentials $credentials)
     {
         //check if $credentials is a subclass of Credentials
-        if(is_subclass_of($credentials, Credentials))
+        if(is_subclass_of($credentials, 'Twitter\Config\Credentials'))
         {
             $this->credentials = $credentials;
         }

@@ -1,4 +1,4 @@
-<?php class Twitter\Config;
+<?php namespace Twitter\Config;
 
 use Twitter\Config\Exceptions\InvalidConfigItemException;
 
@@ -18,10 +18,10 @@ class Config {
         $item = strtoupper($item);
 
         //get all config items as an associative array from the JSON file
-        $config = json_decode(file_get_contents('Config.json'), true);
+        $config = json_decode(file_get_contents(dirname(__FILE__) . "/Config.json"), true);
 
         //if the requested config item doesn't exist, throw Twitter\Config\Exceptions\InvalidConfigItemException
-        if( isset($config[$item]) )
+        if( !isset($config[$item]) )
         {
             throw new InvalidConfigItemException("Invalid Endpoint Requested!");
         }

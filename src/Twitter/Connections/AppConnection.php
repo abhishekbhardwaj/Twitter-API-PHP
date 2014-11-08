@@ -1,5 +1,6 @@
 <?php namespace Twitter\Connections;
 
+use Twitter\Config\Config;
 use Twitter\Config\AppCredentials;
 
 class AppConnection extends Connection {
@@ -29,8 +30,8 @@ class AppConnection extends Connection {
     private function createBearerCredentials()
     {
         //URL encode the consumer key and consumer secret
-        $consumerKey = rawurlencode($this->credentials->consumerKey);
-        $consumerSecret = rawurlencode($this->credentials->consumerSecret);
+        $consumerKey = rawurlencode($this->credentials->getConsumerKey());
+        $consumerSecret = rawurlencode($this->credentials->getConsumerSecret());
 
         //create bearer token credentials by concatenating the consumer key and consumer secret, seperated by a colon.
         $bearerTokenCredentials = $consumerKey . ':' . $consumerSecret;
@@ -94,14 +95,14 @@ class AppConnection extends Connection {
         );
 
         //if query parameters not supplied, continue.
-        if(!is_null($options['query']))
+        if(!is_null($params))
         {
             //Add query parameters to options.
-            $options['query'] => $params;
+            $options['query'] = $params;
         }
 
         //Add headers to the request.
-        $options['headers'] => $headers;
+        $options['headers'] = $headers;
 
         //return constructed options
         return $options;
