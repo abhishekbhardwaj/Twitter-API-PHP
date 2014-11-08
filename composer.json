@@ -1,5 +1,5 @@
 {
-    "name": "lazysocialite/twitter-api-php",
+    "name": "abhishekbhardwaj/twitter-api-php",
     "description": "Simple PHP wrapper for Twitter v1.1 API. Uses Guzzle!",
     "keywords": ["twitter", "api", "sdk", "php"],
     "require": {
