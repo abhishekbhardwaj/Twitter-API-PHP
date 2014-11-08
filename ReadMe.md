@@ -18,7 +18,7 @@ To install via [Composer](https://getcomposer.org), add the following to your co
         "require": {
             "guzzlehttp/guzzle": "~5.0",
             "guzzlehttp/oauth-subscriber": "0.1.*@dev",
-            "abhishekbhardwaj/twitter-api-php": "1.0.0"
+            "abhishekbhardwaj/twitter-api-php": "~1.0"
         }
     }
 ```
