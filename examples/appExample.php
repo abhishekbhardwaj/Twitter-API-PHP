@@ -1,5 +1,12 @@
 <?php
 
+#################################################################
+# To TEST, start off by filling the consumerKey and consumerSecret
+# variables you get from Twitter.
+#
+# Run and enjoy!
+#################################################################
+
 require __DIR__ . '/../vendor/autoload.php';
 
 use Twitter\Client;
