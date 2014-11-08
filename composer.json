@@ -2,6 +2,9 @@
     "name": "abhishekbhardwaj/twitter-api-php",
     "description": "Simple PHP wrapper for Twitter v1.1 API. Uses Guzzle!",
     "keywords": ["twitter", "api", "sdk", "php"],
+    "homepage": "https://github.com/abhishekbhardwaj/Twitter-API-PHP",
+    "license": "MIT",
+    "type": "library",
     "require": {
         "php": ">=5.4.0",
         "guzzlehttp/guzzle": "~5.0",
