@@ -2,7 +2,15 @@
 
 use Twitter\Config\UserCredentials;
 
-class AppConnection extends Connection {
+/**
+ * getRedirectUrlForAuth() and getAccessToken() are used for user authentication workflow (Oauth 1.0).
+ *
+ * Steps:
+ *
+ * - Get a request Token from Twitter and construct an Authentication URL for the user.
+ * - Once the user is redirected back to the app, use 'oauth_token' and 'oauth_verifier' to get access tokens from Twitter.
+ */
+class UserConnection extends Connection {
 
     /**
      * A user connection to Twitter.
@@ -78,6 +86,40 @@ class AppConnection extends Connection {
 
         //return the redirect URL the user should be redirected to.
         return (Config::get('oauth_authenticate') . '?' . $params);
+    }
+
+    /**
+     * Get Access tokens from the user in exchange of oauth_token and oauth_verifier and return
+     * them.
+     *
+     * @param  string $oauthToken
+     * @param  string $oauthVerifier
+     * @return array contains 'oauth_token', 'oauth_token_secret', 'user_id' and 'screen_name'.
+     */
+    public function getAccessToken($oauthToken, $oauthVerifier)
+    {
+        //Oauth1 plugin to get access tokens!
+        $oauth = new Oauth1(array(
+            'consumer_key'    => $this->credentials->getConsumerKey(),
+            'consumer_secret' => $this->credentials->getConsumerSecret(),
+            'token'           => $oauthToken,
+            'verifier'        => $oauthVerifier
+        ));
+
+        $this->guzzleClient->getEmitter()->attach($oauth);
+
+        $accessTokenResponse = $this->guzzleClient->post(
+            Config::get('oauth_access_token'),
+            array(
+                'auth' => 'oauth'
+            )
+        );
+
+        //handle the response
+        $response = array();
+        parse_str($accessTokenResponse, $response);
+
+        return $response; //contains 'oauth_token', 'oauth_token_secret', 'user_id' and 'screen_name'
     }
 
 }
