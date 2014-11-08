@@ -11,7 +11,11 @@ It supports:
 
 ### Installation
 
-{To be filled up later!}
+To install via [Composer](https://getcomposer.org), run the following on your CLI:
+
+```
+composer require abhishekbhardwaj/twitter-api-php
+```
 
 ### Dependencies
 
