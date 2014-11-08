@@ -68,22 +68,14 @@ class Connection {
     }
 
     /**
-     * Make a GET request to the endpoint. Also appends query params to the URL.
+     * Constructs an options array that is sent with the request.
      *
-     * @param  string $endpoint The endpoint to send a GET request to.
-     * @param  array $params   associative array for the query parameters.
-     *
-     * @link   http://guzzle.readthedocs.org/en/latest/quickstart.html#using-responses ResponseInterface details.
-     *
-     * @return GuzzleHttp\Message\ResponseInterface API Response. Contains a lot of information.
+     * @return array options for the request
      */
-    public function get($endpoint, $params)
+    private function constructRequestOptions()
     {
         //empty array
         $options = array();
-
-        //prepend Twitter's API version to the endpoint
-        $endpoint = $this->prependVersionToEndpoint($endpoint, Config::get('api_version'));
 
         //if this is an App connection, use Bearer Token.
         if($this->credentials instanceof AppCredentials)
@@ -118,6 +110,28 @@ class Connection {
             //Set the "auth" request option to "oauth" to sign using oauth.
             $options['auth'] => 'oauth';
         }
+
+        //return constructed options
+        return $options;
+    }
+
+    /**
+     * Make a GET request to the endpoint. Also appends query params to the URL.
+     *
+     * @param  string $endpoint The endpoint to send a GET request to.
+     * @param  array $params   associative array for the query parameters.
+     *
+     * @link   http://guzzle.readthedocs.org/en/latest/quickstart.html#using-responses ResponseInterface details.
+     *
+     * @return GuzzleHttp\Message\ResponseInterface API Response. Contains a lot of information.
+     */
+    public function get($endpoint, $params)
+    {
+        //prepend Twitter's API version to the endpoint
+        $endpoint = $this->prependVersionToEndpoint($endpoint, Config::get('api_version'));
+
+        //contruct an options array to configure the request
+        $options = $this->constructRequestOptions();
 
         //make the GET request to the endpoint with the constructed options.
         $response = $this->guzzleClient->get($endpoint, $options);
@@ -138,47 +152,13 @@ class Connection {
      */
     public function get($endpoint, $params)
     {
-        //empty array
-        $options = array();
-
         //prepend Twitter's API version to the endpoint
         $endpoint = $this->prependVersionToEndpoint($endpoint, Config::get('api_version'));
 
-        //if this is an App connection, use Bearer Token.
-        if($this->credentials instanceof AppCredentials)
-        {
-            //add Bearer Token to the header
-            $headers = array(
-                'Authorization' => 'Bearer ' . $this->credentials->getBearerToken()
-            );
+        //contruct an options array to configure the request
+        $options = $this->constructRequestOptions();
 
-            //Add query parameters to options.
-            $options['query'] => $params;
-
-            //Add headers to the request.
-            $options['headers'] => $headers;
-        }
-        else
-        {
-            //this is a User connection, use Oauth1 tokens.
-            $oauth = new Oauth1(array(
-                'consumer_key'    => $this->credentials->getConsumerKey(),
-                'consumer_secret' => $this->credentials->getConsumerSecret(),
-                'token'           => $this->credentials->getAccessToken(),
-                'token_secret'    => $this->credentials->getAccessTokenSecret()
-            ));
-
-            //attach oauth
-            $this->guzzleClient->getEmitter()->attach($oauth);
-
-            //Add query parameters to options.
-            $options['query'] => $params;
-
-            //Set the "auth" request option to "oauth" to sign using oauth.
-            $options['auth'] => 'oauth';
-        }
-
-        //make the POST request to the endpoint with the constructed options.
+        //make the GET request to the endpoint with the constructed options.
         $response = $this->guzzleClient->post($endpoint, $options);
 
         //return response
