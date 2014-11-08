@@ -17,6 +17,17 @@ To install via [Composer](https://getcomposer.org), run the following on your CL
 composer require abhishekbhardwaj/twitter-api-php
 ```
 
+..or, add the following to your composer.json file and run `composer install`:
+
+```
+    {
+        "require": {
+            "abhishekbhardwaj/twitter-api-php": "1.0.0"
+        }
+    }
+```
+
+
 ### Dependencies
 
 ```
