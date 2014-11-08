@@ -76,4 +76,30 @@ class AppConnection extends Connection {
         return $this;
     }
 
+    /**
+     * Constructs an options array that is sent with the request.
+     *
+     * Uses Bearer Token since this is an AppConnection.
+     *
+     * @return array options for the request
+     */
+    protected function constructRequestOptions($params)
+    {
+        //empty array
+        $options = array();
+
+        //add Bearer Token to the header
+        $headers = array(
+            'Authorization' => 'Bearer ' . $this->credentials->getBearerToken()
+        );
+
+        //Add query parameters to options.
+        $options['query'] => $params;
+
+        //Add headers to the request.
+        $options['headers'] => $headers;
+
+        //return constructed options
+        return $options;
+    }
 }

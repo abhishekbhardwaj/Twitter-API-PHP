@@ -9,7 +9,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Subscriber\Oauth\Oauth1;
 use GuzzleHttp\Message\RequestInterface;
 
-class Connection {
+abstract class Connection {
 
     /**
      * Twitter Credentials - Connection type.
@@ -87,48 +87,7 @@ class Connection {
      *
      * @return array options for the request
      */
-    private function constructRequestOptions()
-    {
-        //empty array
-        $options = array();
-
-        //if this is an App connection, use Bearer Token.
-        if($this->credentials instanceof AppCredentials)
-        {
-            //add Bearer Token to the header
-            $headers = array(
-                'Authorization' => 'Bearer ' . $this->credentials->getBearerToken()
-            );
-
-            //Add query parameters to options.
-            $options['query'] => $params;
-
-            //Add headers to the request.
-            $options['headers'] => $headers;
-        }
-        else
-        {
-            //this is a User connection, use Oauth1 tokens.
-            $oauth = new Oauth1(array(
-                'consumer_key'    => $this->credentials->getConsumerKey(),
-                'consumer_secret' => $this->credentials->getConsumerSecret(),
-                'token'           => $this->credentials->getAccessToken(),
-                'token_secret'    => $this->credentials->getAccessTokenSecret()
-            ));
-
-            //attach oauth
-            $this->guzzleClient->getEmitter()->attach($oauth);
-
-            //Add query parameters to options.
-            $options['query'] => $params;
-
-            //Set the "auth" request option to "oauth" to sign using oauth.
-            $options['auth'] => 'oauth';
-        }
-
-        //return constructed options
-        return $options;
-    }
+    abstract protected function constructRequestOptions($params);
 
     /**
      * Make a GET request to the endpoint. Also appends query params to the URL.
@@ -165,7 +124,7 @@ class Connection {
      *
      * @return GuzzleHttp\Message\ResponseInterface API Response. Contains a lot of information.
      */
-    public function get($endpoint, $params)
+    public function post($endpoint, $params)
     {
         //prepend Twitter's API version to the endpoint
         $endpoint = $this->prependVersionToEndpoint($endpoint, Config::get('api_version'));
