@@ -33,7 +33,7 @@ abstract class Connection {
     public function __construct(Credentials $credentials)
     {
         $this->credentials = $credentials;
-        $this->guzzleClient = $this->createGuzzleClient(Config::get('base_url'), Config::get('api_version'));
+        $this->guzzleClient = $this->createGuzzleClient(Config::get('base_url'));
     }
 
     /**
