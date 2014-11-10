@@ -177,7 +177,7 @@ $response = $app->post('statuses/update.json', array(
 
 ### Changelog
 
-- `Version 1.1.*` is more stable and also lets you upload images to Twitter.
+- November 9, 2014: `Version 1.1.*` is more stable and also lets you upload images to Twitter.
 
 ### Important Links
 
