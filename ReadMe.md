@@ -18,7 +18,7 @@ To install via [Composer](https://getcomposer.org), add the following to your co
         "require": {
             "guzzlehttp/guzzle": "~5.0",
             "guzzlehttp/oauth-subscriber": "0.1.*@dev",
-            "abhishekbhardwaj/twitter-api-php": "~1.0"
+            "abhishekbhardwaj/twitter-api-php": "~1.1"
         }
     }
 ```
@@ -169,6 +169,15 @@ $response = $app->post('statuses/update.json', array(
     'media_ids' => $media
 ));
 ```
+
+### Todo
+
+- Change namespace to something other than `Twitter\*`
+- More documentation.
+
+### Changelog
+
+- `Version 1.1.*` is more stable and also lets you upload images to Twitter.
 
 ### Important Links
 
