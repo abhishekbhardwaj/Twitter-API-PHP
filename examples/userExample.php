@@ -74,6 +74,18 @@ $accessTokenSecret = '{ACCESS_TOKEN_SECRET}';
 //set access tokens
 $app->getCredentials()->setAccessToken($accessToken)->setAccessTokenSecret($accessTokenSecret);
 
+//list of pictures to upload. Input array items shouldn't be more than 4.
+$media = $app->uploadMedia(array(
+    '{{FULL PATH TO PICTURE}}',
+    '{{FULL PATH TO PICTURE}}',
+    '{{FULL PATH TO PICTURE}}',
+    '{{FULL PATH TO PICTURE}}'
+));
+
 //post a new status
-$response = $app->post('statuses/update.json', array('status' => 'Test status!'));
+$response = $app->post('statuses/update.json', array(
+    'status' => 'Test status!',
+    'media_ids' => $media
+));
+
 var_dump($response->json());
