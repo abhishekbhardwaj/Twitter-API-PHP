@@ -6,7 +6,7 @@ use Twitter\Connections\Exceptions\MediaUploadLimitException;
 use Twitter\Connections\Exceptions\ClientException as CE;
 use Twitter\Connections\Exceptions\ServerException as SE;
 
-use GuzzleHttp\Post\Postfile;
+use GuzzleHttp\Post\PostFile;
 use GuzzleHttp\Subscriber\Oauth\Oauth1;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
@@ -224,7 +224,7 @@ class UserConnection extends Connection {
 
             //add body options to the POST request
             $options['body'] = array (
-                'media' => new Postfile('media', fopen($filepath, 'r'))
+                'media' => new PostFile('media', fopen($filepath, 'r'))
             );
 
             try
@@ -235,12 +235,12 @@ class UserConnection extends Connection {
             catch(ClientException $ex)
             {
                 //custom ClientException
-                throw new CE("Oops! You made some error.");
+                throw new CE("Oops! You made some error.", $ex);
             }
             catch(ServerException $ex)
             {
                 //custom ServerException
-                throw new SE("Oops! Twitter's servers are under load. Try again, later!");
+                throw new SE("Oops! Twitter's servers are under load. Try again, later!", $ex);
             }
 
             //add media_id to array

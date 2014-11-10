@@ -1,6 +1,6 @@
-<?php namepsace Twitter\Connections\Exceptions;
+<?php namespace Twitter\Connections\Exceptions;
 
-use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\ServerException as GuzzleServerException;
 
 /**
  * Thrown when Twitter's servers are down or under maintenance or under load or
@@ -33,7 +33,7 @@ class ServerException extends \Exception {
      * @param string          $message   Exception Description Message
      * @param GuzzleHttp\Exception\ServerException $exception The actual exception!
      */
-    public function __construct($message, ServerException $exception)
+    public function __construct($message, GuzzleServerException $exception)
     {
         $this->exception = $exception;
 

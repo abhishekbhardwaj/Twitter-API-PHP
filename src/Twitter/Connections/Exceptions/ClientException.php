@@ -1,6 +1,6 @@
-<?php namepsace Twitter\Connections\Exceptions;
+<?php namespace Twitter\Connections\Exceptions;
 
-use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ClientException as GuzzleClientException;
 
 /**
  * Thrown when Twitter says the user made an error.
@@ -32,7 +32,7 @@ class ClientException extends \Exception {
      * @param string          $message   Exception Description Message
      * @param GuzzleHttp\Exception\ClientException $exception The actual exception!
      */
-    public function __construct($message, ClientException $exception)
+    public function __construct($message, GuzzleClientException $exception)
     {
         $this->exception = $exception;
 
