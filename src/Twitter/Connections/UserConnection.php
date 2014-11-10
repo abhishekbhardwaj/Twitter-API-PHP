@@ -2,8 +2,14 @@
 
 use Twitter\Config\Config;
 use Twitter\Config\UserCredentials;
+use Twitter\Connections\Exceptions\MediaUploadLimitException;
+use Twitter\Connections\Exceptions\ClientException as CE;
+use Twitter\Connections\Exceptions\ServerException as SE;
 
+use GuzzleHttp\Post\Postfile;
 use GuzzleHttp\Subscriber\Oauth\Oauth1;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 
 /**
  * getRedirectUrlForAuth() and getAccessToken() are used for user authentication workflow (Oauth 1.0).
@@ -164,7 +170,7 @@ class UserConnection extends Connection {
     private function base64EncodeMedia($mediaPath)
     {
         //get media type (extension)
-        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $type = pathinfo($mediaPath, PATHINFO_EXTENSION);
 
         //get media data
         $data = file_get_contents($mediaPath);
@@ -181,63 +187,69 @@ class UserConnection extends Connection {
      * media ID's to send with a status.
      *
      * @param  array $filepaths should be a maximum of 4
-     * @return string
+     * @param  GuzzleHttp\Client $client Optional. To inject your own instance of Guzzle. The base_url of the injected client should be set to Config::get('base_upload_url').
+     *
+     * @return string|false If a ServerException occurs, return false.
      */
-    public function uploadMedia($filepaths)
+    public function uploadMedia($filepaths, $client = null)
     {
 
-        //comma separated list of media id's uploaded
-        $mediaIds = "";
+        //maximum number of media files that a user can upload
+        $maxMediaIds = Config::get('max_media_ids');
 
-        //create a new Guzzle client
-        $client = $this->createGuzzleClient(Config::get('base_upload_url'));
+        //if number of media files supplied is larger than $maxMediaIds, throw exception.
+        if(count($filepaths) > $maxMediaIds)
+        {
+            throw new MediaUploadLimitException("You cannot upload more than ${maxMediaIds} media files in a tweet!");
+        }
+
+        //array list of media id's uploaded
+        $mediaIds = array();
+
+        //create a new Guzzle client, if the user hasn't injected anything!
+        if(is_null($client))
+        {
+            $client = $this->createGuzzleClient(Config::get('base_upload_url'));
+        }
 
         //prepend Twitter's API version to the endpoint
         $endpoint = $this->prependVersionToEndpoint("media/upload.json", Config::get('api_version'));
-
-        //to keep track of the number of media files uploaded
-        $i = 0;
 
         //iterate over each filepath
         foreach ($filepaths as $filepath)
         {
 
-            /**
-             * If current media count is equal to max media items Twitter allows,
-             * break out of the loop since we don't want to add anymore.
-             */
-            if( $i == (Config::get('max_media_ids') - 1) )
-            {
-                break;
-            }
-
             //contruct an options array to configure the request
-            $options = $this->constructRequestOptions(array(
-                'media_data' => $this->base64EncodeMedia($filepath);
-            ));
+            $options = $this->constructRequestOptions(array(), $client);
 
-            //make the GET request to the endpoint with the constructed options.
-            $response = $this->guzzleClient->post($endpoint, $options);
+            //add body options to the POST request
+            $options['body'] = array (
+                'media' => new Postfile('media', fopen($filepath, 'r'))
+            );
 
-            //concatenate media id to the return string.
-            if($i == 0)
+            try
             {
-                //if this is the first filename, don't start with a comma
-                $mediaIds .= $response->json()['media_id_string'];
+                //make the POST request to the endpoint with the constructed options.
+                $response = $client->post($endpoint, $options);
             }
-            else
+            catch(ClientException $ex)
             {
-                //if this is not the first filename, start with a comma
-                $mediaIds .= ',' . $response->json()['media_id_string'];
+                //custom ClientException
+                throw new CE("Oops! You made some error.");
+            }
+            catch(ServerException $ex)
+            {
+                //custom ServerException
+                throw new SE("Oops! Twitter's servers are under load. Try again, later!");
             }
 
-            //increment the media uploaded counter.
-            $i++;
+            //add media_id to array
+            array_push($mediaIds, $response->json()['media_id_string']);
 
         }
 
-        //return all media ID's
-        return $mediaIds;
+        //return all media ID's as a string (comma seperated)
+        return (implode(",", $mediaIds));
 
     }
 

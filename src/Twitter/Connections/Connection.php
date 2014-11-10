@@ -77,7 +77,7 @@ abstract class Connection {
      *
      * @return string           Twitter endpoint with the API version prepended.
      */
-    private function prependVersionToEndpoint($endpoint, $version)
+    protected function prependVersionToEndpoint($endpoint, $version)
     {
         return ($version . '/' . $endpoint);
     }
