@@ -43,7 +43,7 @@ abstract class Connection {
      *
      * @return GuzzleHttp\Client A new Guzzle Client
      */
-    private function createGuzzleClient($baseUrl)
+    protected function createGuzzleClient($baseUrl)
     {
         //create and return the Guzzle client
         return new Client(array(

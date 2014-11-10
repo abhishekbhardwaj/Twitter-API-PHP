@@ -30,11 +30,14 @@ class UserConnection extends Connection {
      *
      * Uses Oauth tokens since this is a UserConnection.
      *
+     * @param array $params URL query parameters
+     * @param GuzzleHttp\Client $client a client to attach Oauth1 plugin to (can be null).
+     *
      * @return array options for the request
      */
-    protected function constructRequestOptions($params)
+    protected function constructRequestOptions($params, $client = null)
     {
-        //empty array
+        //empty options array
         $options = array();
 
         //this is a User connection, use Oauth1 tokens.
@@ -45,8 +48,17 @@ class UserConnection extends Connection {
             'token_secret'    => $this->credentials->getAccessTokenSecret()
         ));
 
-        //attach oauth
-        $this->guzzleClient->getEmitter()->attach($oauth);
+        //attach oauth to Guzzle client
+        if(is_null($client))
+        {
+            //use the instance client
+            $this->guzzleClient->getEmitter()->attach($oauth);
+        }
+        else
+        {
+            //to the parameter specified in the client
+            $client->getEmitter()->attach($oauth);
+        }
 
         //if query parameters not supplied, continue.
         if(!is_null($params))
@@ -142,5 +154,77 @@ class UserConnection extends Connection {
 
         return $response; //contains 'oauth_token', 'oauth_token_secret', 'user_id' and 'screen_name'
     }
+
+    /**
+     * Base64 encode the Media located at $mediaPath.
+     *
+     * @param  string $mediaPath media where it's located
+     * @return string
+     */
+    private function base64EncodeMedia($mediaPath)
+    {
+        //get media type (extension)
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+
+        //get media data
+        $data = file_get_contents($mediaPath);
+
+        //encode the filedata with base64 - and then concatenate to make the encoded string.
+        $encodedData = 'data:image/' . $type . ';base64,' . base64_encode($data);
+
+        //return the encoded data
+        return $encodedData;
+    }
+
+    /**
+     * Upload media to Twitter and return a comma separated string containing their
+     * media ID's to send with a status.
+     *
+     * @param  array $filepaths should be a maximum of 4
+     * @return string
+     */
+    public function uploadMedia($filepaths)
+    {
+        //TODO: throw an exception if $filepaths size exceeds 4, since Twitter doesn't allow more than 4.
+
+        //comma separated list of media id's uploaded
+        $mediaIds = "";
+
+        //create a new Guzzle client
+        $client = $this->createGuzzleClient(Config::get('base_upload_url'));
+
+        //prepend Twitter's API version to the endpoint
+        $endpoint = $this->prependVersionToEndpoint("media/upload.json", Config::get('api_version'));
+
+        //iterate over each filepath
+        foreach ($filepaths as $filepath)
+        {
+
+            //contruct an options array to configure the request
+            $options = $this->constructRequestOptions(array(
+                'media_data' => $this->base64EncodeMedia($filepath);
+            ));
+
+            //make the GET request to the endpoint with the constructed options.
+            $response = $this->guzzleClient->post($endpoint, $options);
+
+            //concatenate media id to the return string.
+            if($i == 0)
+            {
+                //if this is the first filename, don't start with a comma
+                $mediaIds .= $response->json()['media_id_string'];
+            }
+            else
+            {
+                //if this is not the first filename, start with a comma
+                $mediaIds .= ',' . $response->json()['media_id_string'];
+            }
+
+        }
+
+        //return all media ID's
+        return $mediaIds;
+    }
+
 
 }
