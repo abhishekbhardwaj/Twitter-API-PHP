@@ -185,7 +185,6 @@ class UserConnection extends Connection {
      */
     public function uploadMedia($filepaths)
     {
-        //TODO: throw an exception if $filepaths size exceeds 4, since Twitter doesn't allow more than 4.
 
         //comma separated list of media id's uploaded
         $mediaIds = "";
@@ -196,9 +195,21 @@ class UserConnection extends Connection {
         //prepend Twitter's API version to the endpoint
         $endpoint = $this->prependVersionToEndpoint("media/upload.json", Config::get('api_version'));
 
+        //to keep track of the number of media files uploaded
+        $i = 0;
+
         //iterate over each filepath
         foreach ($filepaths as $filepath)
         {
+
+            /**
+             * If current media count is equal to max media items Twitter allows,
+             * break out of the loop since we don't want to add anymore.
+             */
+            if( $i == (Config::get('max_media_ids') - 1) )
+            {
+                break;
+            }
 
             //contruct an options array to configure the request
             $options = $this->constructRequestOptions(array(
@@ -220,10 +231,14 @@ class UserConnection extends Connection {
                 $mediaIds .= ',' . $response->json()['media_id_string'];
             }
 
+            //increment the media uploaded counter.
+            $i++;
+
         }
 
         //return all media ID's
         return $mediaIds;
+
     }
 
 
