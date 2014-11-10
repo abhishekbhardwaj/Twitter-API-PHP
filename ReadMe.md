@@ -150,6 +150,26 @@ $response = $app->get('users/show.json', array('screen_name' => 'abhishekwebin')
 $response = $app->post('statuses/update.json', array('status' => 'Test status!'));
 ```
 
+#### Uploading pictures with a Tweet:
+
+A maximum of 4 pictures can be attached to a tweet. To do so:
+
+```php
+//list of pictures to upload. Input array items shouldn't be more than 4.
+$media = $app->uploadMedia(array(
+    '{{FULL PATH TO PICTURE}}',
+    '{{FULL PATH TO PICTURE}}',
+    '{{FULL PATH TO PICTURE}}',
+    '{{FULL PATH TO PICTURE}}'
+));
+
+//post a new status
+$response = $app->post('statuses/update.json', array(
+    'status' => 'Test status!',
+    'media_ids' => $media
+));
+```
+
 ### Important Links
 
 1. All Twitter API Endpoints can be found [here](https://dev.twitter.com/rest/public).
