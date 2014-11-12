@@ -177,7 +177,9 @@ $response = $app->post('statuses/update.json', array(
 
 ### Changelog
 
-- November 9, 2014: `Version 1.1.*` is more stable and also lets you upload images to Twitter.
+- November 12, 2014: `Version 1.1.2` - Parameters are now optional on GET requests.
+- November 9, 2014: `Version 1.1.*` - more stable and also lets you upload images to Twitter.
+- November 8, 2014: `Version 1.0.*` - very first version of the library, didn't have support for media uploads.
 
 ### Important Links
 

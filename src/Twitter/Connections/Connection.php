@@ -99,7 +99,7 @@ abstract class Connection {
      *
      * @return GuzzleHttp\Message\ResponseInterface API Response. Contains a lot of information.
      */
-    public function get($endpoint, $params)
+    public function get($endpoint, $params = null)
     {
         //prepend Twitter's API version to the endpoint
         $endpoint = $this->prependVersionToEndpoint($endpoint, Config::get('api_version'));
