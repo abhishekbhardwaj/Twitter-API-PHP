@@ -91,11 +91,21 @@ catch(ClientException $ex)
 {
     //HTTP 400* was returned. Inspect!
     echo "You made an error!";
+
+    // $ex->getRequest(); //shows what request was sent
+    // $ex->getResponse(); //shows the response received from Twitter
+    // $ex->getMessage(); //shows an interpreted message
+    // $ex->hasResponse(); //check if a response was received
 }
 catch(ServerException $ex)
 {
     //HTTP 500* was returned. Inspect!
     echo "Oops! Twitter's servers are under load. Try again, later!";
+
+    // $ex->getRequest(); //shows what request was sent
+    // $ex->getResponse(); //shows the response received from Twitter
+    // $ex->getMessage(); //shows an interpreted message
+    // $ex->hasResponse(); //check if a response was received
 }
 
 //post a new status
