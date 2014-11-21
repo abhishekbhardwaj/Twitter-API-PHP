@@ -27,6 +27,8 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use Twitter\Client;
 use Twitter\Config\UserCredentials;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 
 //Twitter API keys
 $consumerKey = '{INSERT_CONSUMER_KEY_HERE}';
@@ -74,13 +76,27 @@ $accessTokenSecret = '{ACCESS_TOKEN_SECRET}';
 //set access tokens
 $app->getCredentials()->setAccessToken($accessToken)->setAccessTokenSecret($accessTokenSecret);
 
-//list of pictures to upload. Input array items shouldn't be more than 4.
-$media = $app->uploadMedia(array(
-    '{{FULL PATH TO PICTURE}}',
-    '{{FULL PATH TO PICTURE}}',
-    '{{FULL PATH TO PICTURE}}',
-    '{{FULL PATH TO PICTURE}}'
-));
+try
+{
+    //list of pictures to upload. Input array items shouldn't be more than 4.
+    //this uploads the pictures to Twitter and gets their media ID's which will then be attached to a tweet.
+    $media = $app->uploadMedia(array(
+        '{{FULL PATH TO PICTURE}}',
+        '{{FULL PATH TO PICTURE}}',
+        '{{FULL PATH TO PICTURE}}',
+        '{{FULL PATH TO PICTURE}}'
+    ));
+}
+catch(ClientException $ex)
+{
+    //HTTP 400* was returned. Inspect!
+    echo "You made an error!";
+}
+catch(ServerException $ex)
+{
+    //HTTP 500* was returned. Inspect!
+    echo "Oops! Twitter's servers are under load. Try again, later!";
+}
 
 //post a new status
 $response = $app->post('statuses/update.json', array(
