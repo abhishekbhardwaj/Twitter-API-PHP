@@ -16,16 +16,10 @@ To install via [Composer](https://getcomposer.org), add the following to your co
 ```
     {
         "require": {
-            "guzzlehttp/guzzle": "~5.0",
-            "guzzlehttp/oauth-subscriber": "0.1.*@dev",
             "abhishekbhardwaj/twitter-api-php": "~1.1"
         }
     }
 ```
-
-We are adding the dependencies here manually since `oauth-subscriber` still doesn't have a version for Guzzle 5.0 and thus forces Composer to error out.
-
-This is a temporary fix. Once the official support comes out, it'll all be good again!
 
 ### Dependencies
 
