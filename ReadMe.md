@@ -164,6 +164,8 @@ $response = $app->post('statuses/update.json', array(
 ));
 ```
 
+The list of pictures that is passed on to `uploadMedia()` can be URL's or absolute file paths.
+
 ### Todo
 
 - Change namespace to something other than `Twitter\*`
