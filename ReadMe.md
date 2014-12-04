@@ -26,7 +26,7 @@ To install via [Composer](https://getcomposer.org), add the following to your co
 ```
 "php": ">=5.4.0",
 "guzzlehttp/guzzle": "~5.0",
-"guzzlehttp/oauth-subscriber": "0.1.*@dev"
+"guzzlehttp/oauth-subscriber": "~0.2"
 ```
 
 ### Basic Usage
